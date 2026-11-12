@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#fff7fa">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="My Life">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="stylesheet" href="style.css">
+<title>My Life</title>
+</head>
+<body>
+<header class="topbar">
+  <div><div class="brand">My Life <span>♡</span></div><div class="subbrand">la tua vita, con i tuoi tempi</div></div>
+  <button class="icon-btn" id="settingsBtn" aria-label="Impostazioni">⚙</button>
+</header>
+
+<main>
+  <nav class="tabs" aria-label="Sezioni">
+    <button class="tab active" data-tab="day">Giorno</button>
+    <button class="tab" data-tab="month">Mese</button>
+    <button class="tab" data-tab="tasks">Liste</button>
+    <button class="tab" data-tab="cycle">Ciclo</button>
+  </nav>
+
+  <section id="dayView" class="view active">
+    <div class="date-head">
+      <button class="round-btn" id="prevDay" aria-label="Giorno precedente">‹</button>
+      <div class="date-title"><div id="dayName"></div><h1 id="dayDate"></h1></div>
+      <button class="round-btn" id="nextDay" aria-label="Giorno successivo">›</button>
+    </div>
+    <div class="hint">Scorri a destra o sinistra per cambiare giorno</div>
+    <div class="section-heading"><h2>I tuoi momenti</h2><span id="eventCount" class="muted"></span></div>
+    <div id="eventList" class="event-list"></div>
+    <div id="emptyEvents" class="empty">Nessun evento per questa giornata.<br>Premi <b>+</b> per aggiungerne uno.</div>
+    <div class="section-heading task-heading"><h2>Da fare oggi</h2><button class="text-btn" id="toTasks">Vedi liste</button></div>
+    <div id="todayTasks" class="today-tasks"></div>
+  </section>
+
+  <section id="monthView" class="view">
+    <div class="month-head"><button class="round-btn" id="prevMonth">‹</button><h1 id="monthLabel"></h1><button class="round-btn" id="nextMonth">›</button></div>
+    <div class="calendar-week"><span>L</span><span>M</span><span>M</span><span>G</span><span>V</span><span>S</span><span>D</span></div>
+    <div id="calendar" class="calendar"></div>
+    <p class="hint">Tocca un giorno per aprire la sua giornata.</p>
+  </section>
+
+  <section id="tasksView" class="view">
+    <div class="section-heading"><div><div class="eyebrow">ORGANIZZAZIONE</div><h1>Le mie liste</h1></div><button class="pill-btn" id="newListBtn">+ Nuova lista</button></div>
+    <div id="listsContainer"></div>
+  </section>
+
+  <section id="cycleView" class="view">
+    <div class="eyebrow">BENESSERE</div><h1>Il mio ciclo</h1>
+    <div class="panel">
+      <h2>Traccia il ciclo</h2>
+      <p class="muted">Registra l'inizio e la fine delle mestruazioni. I giorni registrati saranno evidenziati in rosa chiaro.</p>
+      <label>Primo giorno <input type="date" id="periodStart"></label>
+      <label>Ultimo giorno <input type="date" id="periodEnd"></label>
+      <button class="primary-btn" id="savePeriod">Salva ciclo</button>
+      <div id="periodHistory" class="history"></div>
+    </div>
+    <div class="panel">
+      <h2>Anello</h2>
+      <p class="muted">Imposta la durata indicata per il tuo schema. My Life calcolerà le date successive a partire dall'inserimento registrato.</p>
+      <label>Data di inserimento <input type="date" id="ringDate"></label>
+      <div class="two-fields">
+        <label>Giorni con anello <input type="number" min="1" max="60" id="ringIn" value="21"></label>
+        <label>Giorni di pausa <input type="number" min="0" max="30" id="ringOff" value="7"></label>
+      </div>
+      <button class="primary-btn" id="saveRing">Salva impostazioni anello</button>
+      <div id="ringInfo" class="ring-info"></div>
+      <p class="tiny-note">Promemoria organizzativi: verifica sempre le date e le istruzioni del tuo specifico anello con il foglio illustrativo o il professionista sanitario.</p>
+    </div>
+  </section>
+</main>
+
+<button class="fab" id="addBtn" aria-label="Aggiungi">+</button>
+
+<div class="sheet-backdrop" id="sheetBackdrop">
+  <section class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
+    <div class="sheet-handle"></div>
+    <div class="sheet-top"><h2 id="sheetTitle">Aggiungi</h2><button class="icon-btn" id="closeSheet" aria-label="Chiudi">×</button></div>
+    <div id="addMenu" class="add-menu">
+      <button class="menu-choice" id="addEventChoice"><span class="choice-icon">♡</span><span><b>Evento</b><small>Aggiungi un momento alla giornata</small></span><span>›</span></button>
+      <button class="menu-choice" id="addTaskChoice"><span class="choice-icon">☷</span><span><b>Attività</b><small>Aggiungi una cosa da fare</small></span><span>›</span></button>
+    </div>
+    <form id="eventForm" class="form hidden">
+      <label>Nome evento<input id="eventName" maxlength="70" required placeholder="Es. Aperitivo"></label>
+      <div class="two-fields"><label>Ora inizio<input id="eventStart" type="time"></label><label>Ora fine<input id="eventEnd" type="time"></label></div>
+      <label>Emoji
+        <div id="emojiPicker" class="emoji-picker"></div>
+      </label>
+      <label>Colore
+        <div id="colorPicker" class="color-picker"></div>
+      </label>
+      <button class="primary-btn" type="submit">Salva evento</button>
+    </form>
+    <form id="taskForm" class="form hidden">
+      <label>Attività<input id="taskName" maxlength="90" required placeholder="Cosa vuoi fare?"></label>
+      <label>Lista<select id="taskListSelect"></select></label>
+      <label>Scadenza (facoltativa)<input id="taskDue" type="date"></label>
+      <button class="primary-btn" type="submit">Salva attività</button>
+    </form>
+    <form id="listForm" class="form hidden">
+      <label>Nome lista<input id="listName" maxlength="45" required placeholder="Es. Casa"></label>
+      <label>Colore<div id="listColorPicker" class="color-picker"></div></label>
+      <button class="primary-btn" type="submit">Crea lista</button>
+    </form>
+  </section>
+</div>
+
+<div class="sheet-backdrop" id="settingsBackdrop">
+ <section class="sheet small-sheet" role="dialog" aria-modal="true">
+  <div class="sheet-handle"></div><div class="sheet-top"><h2>Impostazioni</h2><button class="icon-btn" id="closeSettings">×</button></div>
+  <p class="muted">I tuoi dati sono salvati su questo dispositivo e in questo browser.</p>
+  <button class="secondary-btn" id="exportData">Esporta i miei dati</button>
+  <button class="secondary-btn danger" id="clearData">Cancella tutti i dati</button>
+ </section>
+</div>
+<script src="app.js"></script>
+</body>
+</html>
