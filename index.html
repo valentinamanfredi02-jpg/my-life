@@ -90,6 +90,14 @@
     <form id="eventForm" class="form hidden">
       <label>Nome evento<input id="eventName" maxlength="70" required placeholder="Es. Aperitivo"></label>
       <div class="two-fields"><label>Ora inizio<input id="eventStart" type="time"></label><label>Ora fine<input id="eventEnd" type="time"></label></div>
+      <label>Ripeti
+        <select id="eventRepeat">
+          <option value="never">Mai</option>
+          <option value="weekly">Ogni settimana</option>
+          <option value="monthly">Ogni mese</option>
+          <option value="yearly">Ogni anno</option>
+        </select>
+      </label>
       <label>Emoji
         <div id="emojiPicker" class="emoji-picker"></div>
       </label>
